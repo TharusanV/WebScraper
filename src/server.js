@@ -1,19 +1,24 @@
-const express = require('express');
-const port = 3000;
+const express = require("express");
+const cors = require('cors');
+require('dotenv').config();
+const connectDB = require('./config/db');
+const PORT = process.env.PORT || 5000;
+
+//Create the app
 const app = express();
 
+// Connect Database
+connectDB();
 
-app.use(express.json()); // Allow server to parse JSON data
+//Middleware
+app.use(cors()); // Allow cross-origin requests
+app.use(express.json()); // Parse JSON bodies
 
-//GET HTTP Requests
-app.get('/api/get-data', (req, res) => {
-    const dataToSend = { greeting: "Hello from Node.js backend!" };
-    
-    res.json(dataToSend);
-});
+//Routes
+const userRoutes = require('./routes/UserRoutes');
+app.use('/api/users', userRoutes);
 
-
-
-app.listen(port, () => {
-    console.log('Server is listening on http://localhost:3000');
+//Start the server
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
