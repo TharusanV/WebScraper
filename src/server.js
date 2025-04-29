@@ -16,7 +16,10 @@ app.use(express.json()); // Parse JSON bodies
 
 //Routes
 const userRoutes = require('./routes/UserRoutes');
+const scrapeRoutes = require('./routes/ScrapeRoute');
+
 app.use('/api/users', userRoutes);
+app.use('/api/scrapes', scrapeRoutes);
 
 //Start the server
 app.listen(PORT, () => {

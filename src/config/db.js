@@ -13,13 +13,4 @@ const connectDB = async () => {
 };
 
 
-run();
-
-async function run() {
-  const user = new User({name: "Bob", email: "bob@gmail.com", password: "test"})
-  await user.save();
-  console.log(user);
-}
-
-
 module.exports = connectDB;
