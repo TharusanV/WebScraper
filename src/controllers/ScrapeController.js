@@ -1,4 +1,4 @@
-const runPythonScript = require('../utils/runPython');
+const runPythonScript = require('../config/runPython');
 const Scrape = require('../models/ScrapeModel');
 
 const postScrape = async (req, res) => {

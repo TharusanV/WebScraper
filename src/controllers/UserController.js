@@ -1,4 +1,38 @@
-const User = require('../models/UserModel')
+const { User } = require('../models/UserModel'); 
+
+const jwt = require('jsonwebtoken');
+const bcrypt = require('bcrypt');
+
+const loginUser = async (req, res) => {
+  const { username, password } = req.body;
+
+  if (!username || !password) {
+    return res.status(400).json({ message: 'Username and password are required.' });
+  }
+
+  try {
+    // Look for user in DB
+    const user = await User.findOne({ username });
+    if (!user) {
+      return res.status(401).json({ message: 'User not found.' });
+    }
+
+    // Check password match
+     //const match = await bcrypt.compare(password, user.password);
+    //if (!match) {
+      //return res.status(403).json({ message: 'Incorrect password.' });
+    //}
+
+    // Login success
+    res.status(200).json({ message: 'Login successful', user: { id: user._id, username: user.username } });
+  } 
+  catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Login failed due to server error.' });
+  }
+
+};
+
 
 const getAllUsers = async (req, res) => {
   try {
@@ -12,13 +46,18 @@ const getAllUsers = async (req, res) => {
 
 const createUser = async (req, res) => {
   const { username, password } = req.body;
- 
+
+  if (!username || !password)
+    return res.status(400).json({ message: 'Missing fields' });
+
   try {
-    const newUser = new User({ username, password });
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const newUser = new User({ username, password: hashedPassword });
     await newUser.save();
-    res.status(201).json(newUser);
+    res.status(201).json({ message: 'User created successfully' });
   } 
   catch (err) {
+    console.error(err);
     res.status(500).json({ message: 'Error creating user' });
   }
 };
@@ -55,4 +94,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { getAllUsers, createUser, updateUser, deleteUser };
+module.exports = { loginUser, getAllUsers, createUser, updateUser, deleteUser };

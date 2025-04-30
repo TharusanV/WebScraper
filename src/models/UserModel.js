@@ -9,3 +9,12 @@ const userSchema = new mongoose.Schema({
 const User = mongoose.model('User', userSchema);
 
 module.exports = {User};
+
+
+
+async function createTempUser(){
+  const tempUser = new User({username: "test", password: "t1"})
+  await tempUser.save();
+}
+
+//createTempUser()
