@@ -14,11 +14,11 @@ loginForm.addEventListener('submit', async function (e) {
   });
 
   const data = await res.json();
-  // if (data.accessToken) {
+  
   if (res.ok) {
-    // sessionStorage.setItem('accessToken', data.accessToken);
     switchToDashboard();
-  } else {
+  } 
+  else {
     alert(data.message || 'Login failed');
   }
 });

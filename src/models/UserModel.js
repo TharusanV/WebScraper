@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
 
 const userSchema = new mongoose.Schema({
   username: { type: String, required: true, unique: true },
@@ -13,7 +14,8 @@ module.exports = {User};
 
 
 async function createTempUser(){
-  const tempUser = new User({username: "test", password: "t1"})
+  const hashedPassword = await bcrypt.hash("t1", 10);
+  const tempUser = new User({username: "test", password: hashedPassword})
   await tempUser.save();
 }
 
