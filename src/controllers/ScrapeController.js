@@ -4,7 +4,7 @@ const Scrape = require('../models/ScrapeModel');
 const postScrape = async (req, res) => {
     try {
         const { url, targets } = req.body;
-        const userId = req.user?._id || "demoUser"; 
+        const userId = req.user.id;
 
         if (!url || !targets || !Array.isArray(targets)) {
             return res.status(400).json({ error: 'URL and targets are required' });

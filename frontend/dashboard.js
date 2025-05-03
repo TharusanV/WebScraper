@@ -18,7 +18,6 @@ document.getElementById('addTarget').addEventListener('click', () => {
 
   const wrapper = document.createElement('div');
   wrapper.style.marginBottom = '10px';
-
   wrapper.innerHTML = `
     <input type="text" name="selector" placeholder="CSS Selector" required />
     <select name="type" required>
@@ -32,24 +31,32 @@ document.getElementById('addTarget').addEventListener('click', () => {
 });
 
 
+
+///////////////////////////////////////////////////////////////////////////////////////////
+
 document.getElementById('scrapeForm').addEventListener('submit', async (e) => {
   e.preventDefault();
 
   const url = document.getElementById('url').value;
-  const targetDivs = document.querySelectorAll('#targetsContainer > div');
 
+  const targetDivs = document.querySelectorAll('#targetsContainer > div');
   const targets = Array.from(targetDivs).map(div => {
     const selector = div.querySelector('input[name="selector"]').value;
     const type = div.querySelector('select[name="type"]').value;
     const attribute = div.querySelector('input[name="attribute"]').value;
     const target = { selector, type };
-    if (type === 'attribute') target.attribute = attribute;
+
+    if (type === 'attribute'){
+      target.attribute = attribute; //In js you can dynamically add fields to an object e.g. objectName.field
+    }
+    
     return target;
   });
 
-  const response = await fetch('http://localhost:3000/api/scrapes', {
+  const response = await fetch('http://localhost:5000/api/scrapes', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
+    credentials: 'include',
     body: JSON.stringify({ url, targets })
   });
 

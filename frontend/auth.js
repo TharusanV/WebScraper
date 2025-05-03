@@ -14,11 +14,13 @@ loginForm.addEventListener('submit', async function (e) {
   });
 
   const data = await res.json();
-  
+
+  // Log the response data for debugging
+  console.log('Login Response:', data);
+
   if (res.ok) {
     switchToDashboard();
-  } 
-  else {
+  } else {
     alert(data.message || 'Login failed');
   }
 });

@@ -1,8 +1,11 @@
 const express = require("express");
 const cors = require('cors');
 const cookieParser = require('cookie-parser');
+
 require('dotenv').config();
+
 const connectDB = require('./config/db');
+
 const BACKENDPORT = process.env.BACKENDPORT;
 const FRONTENDPORT = process.env.FRONTENDPORT;
 
@@ -15,7 +18,11 @@ connectDB();
 //Middleware
 app.use(cookieParser());
 
-app.use(cors( {origin: FRONTENDPORT, credentials: true} )); // Allow cross-origin requests
+app.use(cors( {
+    origin: FRONTENDPORT, 
+    credentials: true // Allow cross-origin requests
+})); 
+    
 app.use(express.json()); // Parse JSON bodies
 
 //Routes

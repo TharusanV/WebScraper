@@ -23,15 +23,46 @@ const loginUser = async (req, res) => {
       return res.status(403).json({ message: 'Incorrect password.' });
     }
 
+    // Create JWT
+    const token = jwt.sign(
+      { id: user._id, username: user.username },
+      process.env.JWT_SECRET,
+      { expiresIn: '1h' }
+    );
+
+    // Log the token creation (for debugging purposes)
+    console.log('Token created:', token);  
+
+    // Send token in HttpOnly cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: false,  // false for development (only use secure: true in production with HTTPS)
+      sameSite: 'Lax',  // using 'Lax' for local dev to prevent issues
+      maxAge: 60 * 60 * 1000, // 1 hour
+    });
+
     // Login success
-    res.status(200).json({ message: 'Login successful', user: { id: user._id, username: user.username } });
-  } 
-  catch (err) {
+    res.status(200).json({ message: 'Login successful' });
+  } catch (err) {
     console.error(err);
     res.status(500).json({ message: 'Login failed due to server error.' });
   }
-
 };
+
+
+
+const logoutUser = async(req, res) => {
+  res.clearCookie('token', {
+    httpOnly: true,
+    secure: falses,
+    sameSite: 'Strict',
+  });
+
+  res.status(200).json({ message: 'Logged out' });
+}
+
+
+
 
 
 const getAllUsers = async (req, res) => {
@@ -98,4 +129,4 @@ const deleteUser = async (req, res) => {
   }
 };
 
-module.exports = { loginUser, getAllUsers, createUser, updateUser, deleteUser };
+module.exports = { loginUser, logoutUser, getAllUsers, createUser, updateUser, deleteUser };

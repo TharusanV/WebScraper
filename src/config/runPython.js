@@ -4,7 +4,7 @@ const path = require('path');
 const runPythonScript = (url, targets) => {
     return new Promise((resolve, reject) => {
         const scriptPath = path.join(__dirname, '../python/scraper.py');
-        const python = spawn('python3', [scriptPath]);
+        const python = spawn(process.env.PYTHON_PATH , [scriptPath]);
 
         let output = '';
         let error = '';
